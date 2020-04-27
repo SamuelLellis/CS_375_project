@@ -21,7 +21,7 @@ public class Main {
 			items.add(new Item(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
 		}
 		System.out.println(new BestFirstSearch(items, capacity).search());
-		System.out.println(Backtrack.backTrack(items, capacity));
+		System.out.println(new Backtrack(items, capacity).search());
 	}
 
 }
