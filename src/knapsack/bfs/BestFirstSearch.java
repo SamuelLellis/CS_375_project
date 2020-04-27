@@ -1,9 +1,5 @@
 package knapsack.bfs;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.PriorityQueue;
@@ -45,21 +41,21 @@ public class BestFirstSearch {
 	 *            the path of the file to write the search results to
 	 * @return the actual maximum profit
 	 */
-	public int search(Path outputFile) {
+	public int search() {
 		Node best = new Node(null, false, 0, 0, 0, computeBound(0, 0)); //A variable representing the node with the best profit found so far, initially set to the root of the tree
 
 		PriorityQueue<Node> queue = new PriorityQueue<>(); //A priority queue for storing every encountered Node
 		queue.add(best);
 
-		int visited = 0; //A counter for the number of visited nodes
-		int leaves = 0; //A counter for the number of visited leaf nodes
+		//		int visited = 0; //A counter for the number of visited nodes
+		//		int leaves = 0; //A counter for the number of visited leaf nodes
 
 		while (!queue.isEmpty()) {
 			Node parent = queue.poll(); //Extract the highest priority node from the queue and store it in parent
-			visited++;
+			//			visited++;
 
 			if (parent.bound < best.profit || parent.weight > capacity) { //NOTE: WE MUST ADD TO THE QUEUE EVEN IF THIS BOUND ONLY EQUALS THE PROFIT
-				leaves++;
+				//				leaves++;
 				continue;
 			}
 
@@ -75,9 +71,10 @@ public class BestFirstSearch {
 				//				}
 				queue.add(include);
 				queue.add(exclude);
-			} else {
-				leaves++;
 			}
+			//			else {
+			//				leaves++;
+			//			}
 
 			if (parent.profit > best.profit) {
 				best = parent;
@@ -93,19 +90,19 @@ public class BestFirstSearch {
 			current = current.parent;
 		}
 
-		if (outputFile != null) {
-			StringBuilder sb = new StringBuilder(); //A string builder for building the output which should be written to the output file
-			sb.append(items.size() + "," + best.profit + "," + solution.size() + "\n");
-			sb.append(visited + "," + leaves + "\n");
-			for (Item item : solution) { //The item variable is each element in the solution list
-				sb.append(item.getWeight() + "," + item.getProfit() + "\n");
-			}
-			try {
-				Files.write(Paths.get("output.txt"), sb.toString().getBytes());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		//		if (outputFile != null) {
+		//			StringBuilder sb = new StringBuilder(); //A string builder for building the output which should be written to the output file
+		//			sb.append(items.size() + "," + best.profit + "," + solution.size() + "\n");
+		//			sb.append(visited + "," + leaves + "\n");
+		//			for (Item item : solution) { //The item variable is each element in the solution list
+		//				sb.append(item.getWeight() + "," + item.getProfit() + "\n");
+		//			}
+		//			try {
+		//				Files.write(Paths.get("output.txt"), sb.toString().getBytes());
+		//			} catch (IOException e) {
+		//				e.printStackTrace();
+		//			}
+		//		}
 
 		return best.profit;
 	}
