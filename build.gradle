@@ -1,0 +1,42 @@
+apply plugin: "java"
+
+version = "1.0.0"
+
+
+configurations {
+	shade
+	compile.extendsFrom shade
+	compile.extendsFrom jmhImplementation
+}
+
+compileJava {
+	sourceCompatibility = '1.8'
+	targetCompatibility = '1.8'
+}
+
+sourceSets {
+    jmh {
+        java.srcDirs = ['src/jmh/java']
+        resources.srcDirs = ['src/jmh/resources']
+        compileClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
+repositories {
+	jcenter() 
+	mavenLocal()
+}
+
+dependencies {		
+	jmhImplementation "org.openjdk.jmh:jmh-core:1.23"
+	jmhAnnotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:1.23"
+}
+
+task jmh(type: JavaExec, dependsOn: jmhClasses) {
+    main = 'org.openjdk.jmh.Main'
+    classpath = sourceSets.jmh.compileClasspath + sourceSets.jmh.runtimeClasspath
+}
+
+classes.finalizedBy(jmhClasses)
+
+
