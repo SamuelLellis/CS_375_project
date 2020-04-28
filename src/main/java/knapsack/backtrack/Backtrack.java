@@ -1,4 +1,4 @@
-package knapsack.bfs.backtrack;
+package knapsack.backtrack;
 
 import java.util.ArrayList; // Import ArrayList
 
@@ -19,12 +19,12 @@ public class Backtrack {
 	}
 
 	private int backTrack(int numItems, int totWeight) {
-		//Base case for recursive call; Indicates negative capcity
+		//Base case for recursive call; Indicates negative capacity
 		//ArrayList<Integer> finalTree = new ArrayList<Integer>();
 		if (totWeight < 0) {
 			return Integer.MIN_VALUE;
 		}
-		//Base case 2; No items or no more capcity 
+		//Base case 2; No items or no more capacity 
 		if (numItems < 0 || totWeight == 0) {
 			return 0;
 		}

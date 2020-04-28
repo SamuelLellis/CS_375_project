@@ -16,8 +16,8 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 
+import knapsack.backtrack.Backtrack;
 import knapsack.bfs.BestFirstSearch;
-import knapsack.bfs.backtrack.Backtrack;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
