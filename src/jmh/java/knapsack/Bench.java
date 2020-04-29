@@ -16,8 +16,8 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 
-import knapsack.backtrack.Backtrack;
-import knapsack.bfs.BestFirstSearch;
+import knapsack.impl.BruteForce;
+import knapsack.impl.BestFirstSearch;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
@@ -32,7 +32,7 @@ public class Bench {
 
 	private ArrayList<Item> items;
 	private BestFirstSearch bfs;
-	private Backtrack backtrack;
+	private BruteForce backtrack;
 
 	@Setup
 	public void setup() {
@@ -42,20 +42,20 @@ public class Bench {
 			items.add(Util.item(100, 100));
 		}
 		bfs = new BestFirstSearch(items, capacity);
-		backtrack = new Backtrack(items, capacity);
+		backtrack = new BruteForce(items, capacity);
 	}
 
 	@Benchmark
 	public void bfs(Blackhole bh) {
 		for (int i = 0; i < NE; i++) {
-			bfs.search();
+			bfs.solve();
 		}
 	}
 
 	@Benchmark
 	public void backtrack(Blackhole bh) {
 		for (int i = 0; i < NE; i++) {
-			backtrack.search();
+			backtrack.solve();
 		}
 	}
 

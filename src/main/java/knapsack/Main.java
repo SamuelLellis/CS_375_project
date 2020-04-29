@@ -5,44 +5,62 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import knapsack.bfs.BestFirstSearch;
-
 public class Main {
 
-	//	private static final int BENCHMARK_RUNS = 1000;
-
 	public static void main(String[] args) throws IOException {
-		//		List<String> lines = Files.readAllLines(Paths.get("inputs.txt")); //A list of the lines in the input file
-		//		int capacity = Integer.parseInt(lines.get(0).trim());
-		//
-		//		ArrayList<Item> items = new ArrayList<>(); //The list of items to build
-		//		for (int i = 1; i < lines.size(); i++) {
-		//			String[] parts = lines.get(i).split(","); //The current line, split on commas
-		//			items.add(new Item(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
+		//		double[] capacityFractions = new double[] { 0.01, 0.99, 0.50 };
+		//		//		double[] capacityFractions = new double[] { 0.01 };
+		//		for (Type type : Type.values()) {
+		//			for (double capacityFraction : capacityFractions) {
+		//				run(type, capacityFraction);
+		//			}
 		//		}
-		run();
-
-		//		System.out.println(new Backtrack(items, capacity).search());
-		//		Benchmark benchmark = new Benchmark(items, capacity);
-		//		benchmark.start();
-		//		System.out.println(benchmark.getAverage());
-	}
-
-	private static void run() {
-		StringBuilder sb = new StringBuilder();
-
-		for (int i = 1; i < 3000; i++) {
-			ArrayList<Item> items = Util.itemList(i, 100, 100);
+		int max = 0;
+		int maxCapacity = 0;
+		ArrayList<Item> maxItems = null;
+		int itemCount = 4;
+		int theoreticalMax = (int) Math.pow(2, itemCount + 1) - 1;
+		int count = 0;
+		int checks = 30_000_000;
+		for (int i = 0; i < checks; i++) {
+			ArrayList<Item> items = Util.itemList(itemCount, 10, 10);
 			int capacity = (int) (Util.getTotalWeight(items) * 0.5);
 
+			int v = Type.BEST_FIRST.getCreator().create(items, capacity).solve();
+			if (v == theoreticalMax) {
+				count++;
+			}
+
+			if (max == 0 || v > max) {
+				maxItems = items;
+				max = v;
+				maxCapacity = capacity;
+			}
+		}
+		System.out.println(max);
+		System.out.println(maxCapacity + ") " + maxItems);
+		System.out.println(count + "/" + checks);
+		System.out.println("PERCENT: " + 100D * count / checks);
+	}
+
+	public static void run(Type type, double capacityFraction) {
+		System.out.println("TYPE: " + type);
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 1; i < 1000; i++) {
+			ArrayList<Item> items = Util.itemList(i, 100, 100);
+			int capacity = (int) (Util.getTotalWeight(items) * capacityFraction);
+
 			long start = System.nanoTime();
-			//			new Backtrack(items, capacity).search();
-			new BestFirstSearch(items, capacity).search();
+			type.getCreator().create(items, capacity).solve();
 			long end = System.nanoTime();
-			System.out.println(end - start + "ns");
+			if (end - start > 6863546900L) {
+				System.out.println(capacity + "," + items);
+			}
+			System.out.println(i + ") " + (end - start) + "ns");
 			sb.append(i + "," + (end - start) + "\n");
 			try {
-				Files.write(Paths.get("result.csv"), sb.toString().getBytes());
+				Files.write(Paths.get("data", type + "-" + capacityFraction + ".txt"), sb.toString().getBytes());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

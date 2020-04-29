@@ -1,19 +1,23 @@
-package knapsack.bfs;
+package knapsack.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.PriorityQueue;
 
 import knapsack.Item;
+import knapsack.Solution;
 
 /**
  * A class that takes in an instance of a 0/1 knapsack problem and can find and
  * write the optimal solution to a file
  */
-public class BestFirstSearch {
+public class BestFirstSearch implements Solution {
 
 	private ArrayList<Item> items; //The list of items to search
 	private int capacity; //The maximum total weight for this search
+
+	private int visited;
+	private ArrayList<Item> solution;
 
 	/**
 	 * Creates a new {@link BestFirstSearch} instance with the corresponding
@@ -41,18 +45,19 @@ public class BestFirstSearch {
 	 *            the path of the file to write the search results to
 	 * @return the actual maximum profit
 	 */
-	public int search() {
+	@Override
+	public int solve() {
 		Node best = new Node(null, false, 0, 0, 0, computeBound(0, 0)); //A variable representing the node with the best profit found so far, initially set to the root of the tree
 
 		PriorityQueue<Node> queue = new PriorityQueue<>(); //A priority queue for storing every encountered Node
 		queue.add(best);
 
-		//		int visited = 0; //A counter for the number of visited nodes
+		int visited = 0; //A counter for the number of visited nodes
 		//		int leaves = 0; //A counter for the number of visited leaf nodes
 
 		while (!queue.isEmpty()) {
 			Node parent = queue.poll(); //Extract the highest priority node from the queue and store it in parent
-			//			visited++;
+			visited++;
 
 			if (parent.bound < best.profit || parent.weight > capacity) { //NOTE: WE MUST ADD TO THE QUEUE EVEN IF THIS BOUND ONLY EQUALS THE PROFIT
 				//				leaves++;
@@ -104,7 +109,16 @@ public class BestFirstSearch {
 		//			}
 		//		}
 
-		return best.profit;
+		//		return best.profit;
+		return visited;
+	}
+
+	public int getVisited() {
+		return visited;
+	}
+
+	public ArrayList<Item> getSolution() {
+		return solution;
 	}
 
 	/**

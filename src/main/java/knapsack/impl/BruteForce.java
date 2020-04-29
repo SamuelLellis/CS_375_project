@@ -1,20 +1,22 @@
-package knapsack.backtrack;
+package knapsack.impl;
 
 import java.util.ArrayList; // Import ArrayList
 
 import knapsack.Item;
+import knapsack.Solution;
 
-public class Backtrack {
+public class BruteForce implements Solution {
 
 	private ArrayList<Item> items;
 	private int capacity;
 
-	public Backtrack(ArrayList<Item> items, int capacity) {
+	public BruteForce(ArrayList<Item> items, int capacity) {
 		this.items = items;
 		this.capacity = capacity;
 	}
 
-	public int search() {
+	@Override
+	public int solve() {
 		return backTrack(items.size() - 1, capacity);
 	}
 
