@@ -52,7 +52,7 @@ public class BestFirstSearch implements Solution {
 		PriorityQueue<Node> queue = new PriorityQueue<>(); //A priority queue for storing every encountered Node
 		queue.add(best);
 
-		int visited = 0; //A counter for the number of visited nodes
+		//		int visited = 0; //A counter for the number of visited nodes
 		//		int leaves = 0; //A counter for the number of visited leaf nodes
 
 		while (!queue.isEmpty()) {
@@ -109,8 +109,7 @@ public class BestFirstSearch implements Solution {
 		//			}
 		//		}
 
-		//		return best.profit;
-		return visited;
+		return best.profit;
 	}
 
 	public int getVisited() {

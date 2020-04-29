@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import knapsack.impl.BestFirstSearch;
+
 public class Main {
 
 	public static void main(String[] args) throws IOException {
@@ -26,7 +28,9 @@ public class Main {
 			ArrayList<Item> items = Util.itemList(itemCount, 10, 10);
 			int capacity = (int) (Util.getTotalWeight(items) * 0.5);
 
-			int v = Type.BEST_FIRST.getCreator().create(items, capacity).solve();
+			BestFirstSearch bfs = (BestFirstSearch) Type.BEST_FIRST.getCreator().create(items, capacity);
+			bfs.solve();
+			int v = bfs.getVisited();
 			if (v == theoreticalMax) {
 				count++;
 			}
