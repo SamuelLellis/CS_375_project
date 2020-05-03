@@ -37,9 +37,6 @@ public class Backtracking implements Solution {
 		if (best < currProf) {//KEVIN NEW LINE HERE
 			best = currProf;//KEVIN NEW LINE HERE
 		}
-		if(currProf > capacity) {
-			return 0;
-		}
 		int accum = currProf;//KEVIN NEW LINE HERE
 		for (int i = numItems; i >= 0; i--) {//KEVIN NEW LINE HERE
 			accum += items.get(i).getProfit();//KEVIN NEW LINE HERE

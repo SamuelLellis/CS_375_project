@@ -10,13 +10,49 @@ import knapsack.impl.BestFirstSearch;
 public class Main {
 
 	public static void main(String[] args) throws IOException {
+		ArrayList<Item> items = Util.itemList(10, 100, 100);
+		double[] capacityFractions = new double[] { 0.01, 0.50, 0.99 };
+		for (int i = 0; i < capacityFractions.length; i++) {
+			double omega = capacityFractions[i];
+			for (Type type : Type.values()) {
+				int capacity = (int) (Util.getTotalWeight(items) * omega);
+				int solution = type.getCreator().create(items, capacity).solve();
+				System.out.println(type + " " + omega + " = " + solution);
+			}
+			System.out.println();
+		}
+
 		//		double[] capacityFractions = new double[] { 0.01, 0.99, 0.50 };
-		//		//		double[] capacityFractions = new double[] { 0.01 };
 		//		for (Type type : Type.values()) {
 		//			for (double capacityFraction : capacityFractions) {
 		//				run(type, capacityFraction);
 		//			}
 		//		}
+	}
+
+	public static void run(Type type, double capacityFraction) {
+		System.out.println("TYPE: " + type + " " + capacityFraction);
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 1; i < 10; i++) {
+			ArrayList<Item> items = Util.itemList(i, 100, 100);
+			int capacity = (int) (Util.getTotalWeight(items) * capacityFraction);
+
+			long start = System.nanoTime();
+			type.getCreator().create(items, capacity).solve();
+			long end = System.nanoTime();
+			System.out.println(i + ") " + (end - start) + "ns");
+			sb.append(i + "," + (end - start) + "\n");
+			try {
+				Files.write(Paths.get("data", type + "-" + capacityFraction + ".txt"), sb.toString().getBytes());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	public static void testBFSWorstCase() {
 		int max = 0;
 		int maxCapacity = 0;
 		ArrayList<Item> maxItems = null;
@@ -45,31 +81,6 @@ public class Main {
 		System.out.println(maxCapacity + ") " + maxItems);
 		System.out.println(count + "/" + checks);
 		System.out.println("PERCENT: " + 100D * count / checks);
-	}
-
-	public static void run(Type type, double capacityFraction) {
-		System.out.println("TYPE: " + type);
-		StringBuilder sb = new StringBuilder();
-
-		for (int i = 1; i < 1000; i++) {
-			ArrayList<Item> items = Util.itemList(i, 100, 100);
-			int capacity = (int) (Util.getTotalWeight(items) * capacityFraction);
-
-			long start = System.nanoTime();
-			type.getCreator().create(items, capacity).solve();
-			long end = System.nanoTime();
-			if (end - start > 6863546900L) {
-				System.out.println(capacity + "," + items);
-			}
-			System.out.println(i + ") " + (end - start) + "ns");
-			sb.append(i + "," + (end - start) + "\n");
-			try {
-				Files.write(Paths.get("data", type + "-" + capacityFraction + ".txt"), sb.toString().getBytes());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
 	}
 
 }
